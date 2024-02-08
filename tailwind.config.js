@@ -8,6 +8,9 @@ export default {
     extend: {
       width:{
         '256':'90rem',
+      },
+      height:{
+        '98':'26rem'
       }
     },
   },

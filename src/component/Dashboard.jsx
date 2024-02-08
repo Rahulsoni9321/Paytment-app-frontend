@@ -180,7 +180,7 @@ export function Dashboard() {
               <div className="h-4 w-5/6 animate-pulse bg-slate-400 rounded-lg"></div>
             </div>
           ) : (
-            <span> {balance}/-</span>
+            <span className="text-green-600"> {balance}/-</span>
           )}
         </div>
         <br></br>
