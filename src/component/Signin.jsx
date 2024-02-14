@@ -1,10 +1,11 @@
 import { useEffect, useLayoutEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { SpinAnimation } from "./SpinAnimation";
+import { Inputbox } from "./Inputbox";
 
 export function Signin() {
   const [Message, setmessage] = useState("");
-  const [username, setusername] = useState("");
+  const [username, setemail] = useState("");
   const [password, setpassword] = useState("");
   const navigate = useNavigate();
   const [data,setdata]=useState(false)
@@ -17,10 +18,15 @@ export function Signin() {
   },[])
   return (
     <>
-      {data ? ( <div className="bg-zinc-300 h-lvh w-full grid grid-cols-4 md:grid-cols-9 items-center overflow-y-auto ">
-        <div className="col-span-1 md:col-span-3 "></div>
-        <div className="col-span-2 md:col-span-3  h-96 bg-white w-72 md:w-72  rounded-xl">
-          <div className="mt-5 text-center">
+      {data ? ( <div className="bg-gray-200 h-lvh w-full grid grid-cols-4 md:grid-cols-9 items-center overflow-y-auto ">
+        <div className="col-span-1 md:col-span-6 ">
+        <div className="flex justify-center items-center">
+
+<img className="w-0 h-0 md:w-60 md:h-32" src="/Paytm-Logo.wine.png"></img>
+  </div>
+        </div>
+        <div className="col-span-2 md:col-span-3 mt-12  h-80 bg-white w-72 md:w-11/12  rounded-xl">
+          <div className="pt-4 text-center">
             <h1 className="font-bold font-sans text-2xl">Sign In</h1>
           </div>
           <div className="text-center mt-2">
@@ -31,27 +37,14 @@ export function Signin() {
           <div className="mt-6">
             <p className="text-xs font-semibold ml-4">Email</p>
             <center>
-              <input
-                onChange={(e) => {
-                  setusername(e.target.value);
-                }}
-                className="mt-2 border border-1 border-gray-300 pl-2 w-5/6 rounded-sm text-xs text-gray-500 py-2"
-                type="email"
-                placeholder="Enter your email"
-              ></input>
+            <Inputbox placeholder="Enter your email" type="text" setvalue={setemail}/>
+
             </center>
           </div>
           <div className="mt-4">
             <p className="text-xs font-semibold ml-4">Password</p>
             <center>
-              <input
-                onChange={(e) => {
-                  setpassword(e.target.value);
-                }}
-                className=" mt-2 border border-1 border-gray-300 pl-2 w-5/6 rounded-sm text-xs text-gray-500 py-2"
-                type="password"
-                placeholder="Enter your password"
-              ></input>
+             <Inputbox placeholder="Enter your password" type="password" setvalue={setpassword}/>
             </center>
           </div>
           {Message.includes("succesfully") ? (
@@ -60,10 +53,10 @@ export function Signin() {
             <p className="mt-3 ml-6 text-xs text-red-500">{Message}</p>
           )}
 
-          <div className="pt-2">
+          <div className="pt-1">
             <center>
               <button
-                className="w-5/6 mt-2 rounded-md bg-black text-white text-xs py-2"
+                className="bg-cyan-500 rounded-md text-white w-11/12 mt-1 text-xs py-1.5 hover:bg-cyan-700"
                 onClick={() => {
                   fetch("https://paytm-backend-3ujl.onrender.com/api/v1/user/signin", {
                     method: "POST",
@@ -88,12 +81,14 @@ export function Signin() {
               </button>
             </center>
           </div>
-          <div className="text-xs text-center mt-3 pt-3">
+          <div className="text-xs text-center  pt-2">
             <p className="font-semibold ">
               Don't have an account?{" "}
-              <a className="underline underline-offset-1" href="/Signup">
+              <button onClick={()=>{
+                navigate('/Signup')
+              }} className="text-cyan-500 hover:text-cyan-700 underline underline-offset-1" >
                 Sign up
-              </a>
+              </button>
             </p>
           </div>
         </div>

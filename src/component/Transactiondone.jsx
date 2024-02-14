@@ -11,18 +11,18 @@ export function Transactiondone() {
     }, 4000);
   }, []);
   return (
-    <div className="flex justify-center w-full h-screen pt-16">
-      <div>
-      <img className="w-60 h-32 ml-28" src="/Paytm-Logo.wine.png"></img>
-    <div className="flex justify-center items-center w-full   ">
-      <div>
+    <div className="flex justify-center  w-full h-screen pt-16">
+      <div className="text-center">
+      <center><img className="w-48 h-24 md:w-60 md:h-32 " src="/Paytm-Logo.wine.png"></img></center>
+
         <div className="flex justify-center items-center  ">
           <div className="drop-shadow-xl">
-            <p className="text-cyan-500 text-3xl font-bold">
+            <p className="text-cyan-500 text-xl md:text-3xl font-bold">
               Amount Transferred Succesfully{" "}
             </p>{" "}
           </div>
 
+          
           <div className="text-cyan-500 ml-4 drop-shadow-3xl">
             <svg
               className="stroke-cyan-500 "
@@ -31,7 +31,7 @@ export function Transactiondone() {
               viewBox="0 0 24 24"
               stroke-width="3"
               stroke="currentColor"
-              class="w-16 h-16"
+              class="w-8 h-8 md:w-16 md:h-16"
             >
               <path
                 stroke-linecap="round"
@@ -40,11 +40,11 @@ export function Transactiondone() {
               />
             </svg>
           </div>
+          
         </div>
-       <SpinAnimation Message={"Redirecting to Dashboard...."}/>
+       <div className="mt-4"><SpinAnimation Message={"Redirecting to Dashboard...."}/></div>
       </div>
       </div>
-    </div>
-    </div>
+  
   );
 }

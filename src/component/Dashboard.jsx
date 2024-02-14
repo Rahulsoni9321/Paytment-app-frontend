@@ -74,7 +74,9 @@ function useData() {
         }
       );
       setloading(false);
-      setname(response.data.user.firstname);
+      let name=response.data.user.firstname;
+      const capitalizedname = name.charAt(0).toUpperCase() + name.slice(1);
+      setname(capitalizedname);
       setid(response.data.user._id);
     }
     userinfo();
@@ -83,24 +85,20 @@ function useData() {
   return { name, id, load };
 }
 
-
-
 function useDebounce(input) {
-  
-  const [debounced,setdebounced]=useState("")
+  const [debounced, setdebounced] = useState("");
 
-  useEffect(()=>{
-      let intervalnumber=setTimeout(() => {
-          setdebounced(input);
-      }, 100);
+  useEffect(() => {
+    let intervalnumber = setTimeout(() => {
+      setdebounced(input);
+    }, 100);
 
-      return ()=>{
-          clearTimeout(intervalnumber)
-      }
-  },[input])
+    return () => {
+      clearTimeout(intervalnumber);
+    };
+  }, [input]);
 
- 
-return debounced;
+  return debounced;
 }
 export function Dashboard() {
   const navigate = useNavigate();
@@ -108,7 +106,7 @@ export function Dashboard() {
   const { name, id, load } = useData();
   const [filters, setfilter] = useState("");
   const [allusers, setallusers] = useState([]);
-  const debounce=useDebounce(filters);
+  const debounce = useDebounce(filters);
 
   const [data, setdata] = useState(false);
 
@@ -140,15 +138,15 @@ export function Dashboard() {
     <>
       <div className="h-full w-full font-sans ">
         <div className="flex justify-between items-center  shadow-md  bg-white">
-          <div className="flex font-bold ml-12 text-3xl ">
+          <div className="flex font-bold ml-2 md:ml-12 text-3xl ">
             <img className="w-56 h-24" src="/Paytm-Logo.wine.png"></img>
           </div>
-          <div className="mr-16 flex justify-between ">
+          <div className="mr-4 md:mr-16 flex justify-between ">
             <span className="font-semibold text-black  text-xl">
               Hello,{name}
             </span>{" "}
             <div className="w-7 h-7 rounded-full font-bold bg-blue-900 text-white  text-center text-sm p-1 ml-4">
-              {name[0]}
+              {name && name.length>0 ? name[0].toUpperCase() : ''}
             </div>
             <div>
               <button
@@ -207,7 +205,7 @@ export function Dashboard() {
             onChange={(e) => {
               setfilter(e.target.value);
             }}
-            className="w-[77rem] pl-2 py-1 border border-1 border-gray-300 shadow-md rounded-md"
+            className="w-11/12 pl-2 py-1 border border-1 border-gray-300 shadow-md rounded-md"
             type="text"
             placeholder="Search users..."
           ></input>
