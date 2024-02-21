@@ -2,29 +2,36 @@ import axios from "axios";
 import { useEffect, useLayoutEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { SpinAnimation } from "./SpinAnimation";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
+import { LoadingAtom,AmountAtom, MessageAtom, TrackerAtom } from "../../atoms/atomsSend";
+
+
 
 export function Send() {
   const navigate = useNavigate();
-  const [amount, setamount] = useState("");
-  const [tracker, settracker] = useState(false);
-  const [message, setmessage] = useState("");
+  const [tracker, settracker] = useRecoilState(TrackerAtom);
+  const [amount,setamount]=useRecoilState(AmountAtom);
+  const [message, setmessage] = useRecoilState(MessageAtom);
+  const [data, setdata] = useRecoilState(LoadingAtom);
   const [searchParams] = useSearchParams();
-  const [data, setdata] = useState(false);
   const id = searchParams.get("id");
   const name = searchParams.get("name");
 
   useEffect(() => {
-    setTimeout(() => {
+   const interval= setTimeout(() => {
       setdata(true);
+
+      return () =>{
+        clearTimeout(interval)
+      }
     }, 500);
   }, []);
-
   return (
-    <>
+   <>
       {data ? (
         <div className="h-screen w-full grid grid-cols-4 md:grid-cols-9 items-center bg-gray-100 overflow-y-auto ">
           <div className="col-span- 1 md:col-span-3"></div>
-          <div className="col-span-2 md:col-span-3">
+          <div className="col-span-2 md:col-span-3 ">
             <div className="text-center flex justify-center">
               <img className="w-52 h-24" src="/Paytm-Logo.wine.png"></img>
             </div>
@@ -78,7 +85,7 @@ export function Send() {
                       setmessage("Please enter valid number.");
                       setTimeout(() => {
                         setmessage("");
-                      }, 3000);
+                      }, 2000);
                       settracker(false);
                       return;
                     } else {
@@ -88,7 +95,7 @@ export function Send() {
                         setTimeout(() => {
                           setmessage("");
 
-                        }, 3000);
+                        }, 2000);
                         return;
                       }
                       try {
@@ -115,6 +122,7 @@ export function Send() {
                             navigate("/TransactionCompleted");
                           }, 1000);
                         }
+                        
                       } catch (error) {
                         if (error.response && error.response.data) {
                           // Check if the error response has a message key
@@ -124,6 +132,9 @@ export function Send() {
                             errorMessage ||
                               "An error occurred while sending money. Please try again."
                           );
+                          setTimeout(() => {
+                            setmessage("");
+                          }, 2000);
                         } else {
                           // If no specific message in the error response, set a generic error message
                           setmessage(
@@ -159,6 +170,5 @@ export function Send() {
           <SpinAnimation Message={"Loading..."} />
         </div>
       )}
-    </>
-  );
+</>  );
 }

@@ -2,13 +2,15 @@ import { useEffect, useLayoutEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { SpinAnimation } from "./SpinAnimation";
 import { Inputbox } from "./Inputbox";
+import { useRecoilState } from "recoil";
+import { LoadingSigninatom, Messagesigninatom, emailsigninatom, passwordSigninatom } from "../../atoms/atoms.Signin";
 
 export function Signin() {
-  const [Message, setmessage] = useState("");
-  const [username, setemail] = useState("");
-  const [password, setpassword] = useState("");
   const navigate = useNavigate();
-  const [data,setdata]=useState(false)
+  const [Message, setmessage] = useRecoilState(Messagesigninatom);
+  const [username, setemail] = useRecoilState(emailsigninatom);
+  const [password, setpassword] = useRecoilState(passwordSigninatom);
+  const [data,setdata]=useRecoilState(LoadingSigninatom)
 
 
   useEffect(()=>{

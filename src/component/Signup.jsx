@@ -3,14 +3,16 @@ import { useNavigate } from "react-router-dom";
 import { SpinAnimation } from "./SpinAnimation";
 import axios from "axios";
 import { Inputbox } from "./Inputbox";
+import { useRecoilState } from "recoil";
+import {  LoadingSignupAtom, MessageSignupAtom, emailSignupAtom,  firstnameSignupAtom, lastnameSignupAtom, passwordSignupAtom } from "../../atoms/atomsSignup";
 
 export function Signup() {
-  const [Message, setmessage] = useState("");
-  const [firstname, setfirstname] = useState("");
-  const [lastname, setlastname] = useState("");
-  const [email, setemail] = useState("");
-  const [password, setpassword] = useState("");
-  const [data, setdata] = useState(false);
+  const [Message, setmessage] = useRecoilState(MessageSignupAtom);
+  const [firstname, setfirstname] = useRecoilState(firstnameSignupAtom);
+  const [lastname, setlastname] = useRecoilState(lastnameSignupAtom);
+  const [email, setemail] = useRecoilState(emailSignupAtom);
+  const [password, setpassword] = useRecoilState(passwordSignupAtom);
+  const [data, setdata] = useRecoilState(LoadingSignupAtom);
   const navigate = useNavigate();
 
   useEffect(() => {
