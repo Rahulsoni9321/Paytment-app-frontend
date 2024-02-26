@@ -56,6 +56,7 @@ export function Dashboard() {
           }
         );
         setallusers(response.data.user);
+        setdata(true)
       } catch (e) {
         console.error("Error fetching data" + e);
       }
