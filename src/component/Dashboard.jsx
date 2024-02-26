@@ -3,13 +3,24 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { Usercolumn } from "./Usercolumn";
 import { Animationuser } from "./Animationuser";
-import { useRecoilState, useRecoilStateLoadable, useRecoilValueLoadable, useSetRecoilState } from "recoil";
-import { AllUsersAtom, AllUsersStatus, BalanceAtom, DebouncedAtom, UserDataAtom, filterUser } from "../../atoms/atomsDashboard";
+import {
+  useRecoilState,
+  useRecoilStateLoadable,
+  useRecoilValueLoadable,
+  useSetRecoilState,
+} from "recoil";
+import {
+  AllUsersAtom,
+  AllUsersStatus,
+  BalanceAtom,
+  DebouncedAtom,
+  UserDataAtom,
+  filterUser,
+} from "../../atoms/atomsDashboard";
 import { SpinAnimation } from "./SpinAnimation";
 
-
 function useDebounce(input) {
-  const  [debounced,setdebounced] = useRecoilState(DebouncedAtom);
+  const [debounced, setdebounced] = useRecoilState(DebouncedAtom);
 
   useEffect(() => {
     let intervalnumber = setTimeout(() => {
@@ -23,7 +34,6 @@ function useDebounce(input) {
 
   return debounced;
 }
-
 
 export function Dashboard() {
   const navigate = useNavigate();
@@ -61,7 +71,7 @@ export function Dashboard() {
   return (
     <>
       <div className="h-full w-full font-sans ">
-       <Navbar/>
+        <Navbar />
 
         <br></br>
         <div className="flex items-center font-bold ml-5 text-lg md:text-2xl">
@@ -146,46 +156,47 @@ export function Dashboard() {
   );
 }
 
-
-
 function Navbar() {
   const UserdataLoadable = useRecoilValueLoadable(UserDataAtom);
+  const navigate = useNavigate();
 
-   return <>
-    <div className="flex justify-between items-center  shadow-md  bg-white">
-          <div className="flex font-bold ml-2 md:ml-12 text-3xl ">
-            <img className="w-56 h-24" src="/Paytm-Logo.wine.png"></img>
-          </div>
-          <div className="mr-4 md:mr-16 flex justify-between ">
-            {UserdataLoadable.state == "loading" ? (
-              <div className="text-xl font-semibold text-black flex justify-between">
-                <SpinAnimation></SpinAnimation>
-                <div>Loading...</div>
-              </div>
-            ) : (
-              <>
-                <span className="font-semibold text-black  text-md md:text-xl">
-                  Hello,{UserdataLoadable.contents.name}
-                </span>
-                <div className="w-7 h-7 rounded-full font-bold bg-blue-900 text-white  text-center text-sm p-1 ml-2 md:ml-4">
-                  {UserdataLoadable.contents.name &&
-                  UserdataLoadable.contents.name.length > 0
-                    ? UserdataLoadable.contents.name[0]
-                    : ""}
-                </div>
-                <div>
-                  <button
-                    className="bg-white text-md md:text-lg text-black  ml-4 font-semibold underline underline-offset-1"
-                    onClick={() => {
-                      navigate("/logout");
-                    }}
-                  >
-                    Logout?
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
+  return (
+    <>
+      <div className="flex justify-between items-center  shadow-md  bg-white">
+        <div className="flex font-bold ml-2 md:ml-12 text-3xl ">
+          <img className="w-56 h-24" src="/Paytm-Logo.wine.png"></img>
         </div>
-        </>
+        <div className="mr-4 md:mr-16 flex justify-between ">
+          {UserdataLoadable.state == "loading" ? (
+            <div className="text-xl font-semibold text-black flex justify-between">
+              <SpinAnimation></SpinAnimation>
+              <div>Loading...</div>
+            </div>
+          ) : (
+            <>
+              <span className="font-semibold text-black  text-md md:text-xl">
+                Hello,{UserdataLoadable.contents.name}
+              </span>
+              <div className="w-7 h-7 rounded-full font-bold bg-blue-900 text-white  text-center text-sm p-1 ml-2 md:ml-4">
+                {UserdataLoadable.contents.name &&
+                UserdataLoadable.contents.name.length > 0
+                  ? UserdataLoadable.contents.name[0]
+                  : ""}
+              </div>
+              <div>
+                <button
+                  className="bg-white text-md md:text-lg text-black  ml-4 font-semibold underline underline-offset-1"
+                  onClick={() => {
+                    navigate("/logout");
+                  }}
+                >
+                  Logout?
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
+    </>
+  );
 }

@@ -4,7 +4,14 @@ import { SpinAnimation } from "./SpinAnimation";
 import axios from "axios";
 import { Inputbox } from "./Inputbox";
 import { useRecoilState } from "recoil";
-import {  LoadingSignupAtom, MessageSignupAtom, emailSignupAtom,  firstnameSignupAtom, lastnameSignupAtom, passwordSignupAtom } from "../../atoms/atomsSignup";
+import {
+  LoadingSignupAtom,
+  MessageSignupAtom,
+  emailSignupAtom,
+  firstnameSignupAtom,
+  lastnameSignupAtom,
+  passwordSignupAtom,
+} from "../../atoms/atomsSignup";
 
 export function Signup() {
   const [Message, setmessage] = useRecoilState(MessageSignupAtom);
@@ -13,6 +20,7 @@ export function Signup() {
   const [email, setemail] = useRecoilState(emailSignupAtom);
   const [password, setpassword] = useRecoilState(passwordSignupAtom);
   const [data, setdata] = useRecoilState(LoadingSignupAtom);
+  const [tracker, settracker] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -26,14 +34,17 @@ export function Signup() {
         <div className="bg-gray-200 h-screen w-full grid grid-cols-4 md:grid-cols-9 items-center shadow-3xl overflow-y-auto ">
           <div className="col-span-1 md:col-span-6">
             <div className="flex justify-center items-center">
-
-          <img className="w-0 h-0 md:w-60 md:h-32" src="/Paytm-Logo.wine.png"></img>
+              <img
+                className="w-0 h-0 md:w-60 md:h-32"
+                src="/Paytm-Logo.wine.png"
+              ></img>
             </div>
-
           </div>
           <div className="col-span-2 md:col-span-3  h-[28rem] bg-white w-72 md:w-11/12 mt-4  rounded-xl ">
             <div>
-              <h1 className="text-center text-cyan-500 font-bold text-3xl pt-4">Sign Up</h1>
+              <h1 className="text-center text-cyan-500 font-bold text-3xl pt-4">
+                Sign Up
+              </h1>
             </div>
             <center>
               <div className="text-center text-sm pt-2 px-4 leading-tight text-gray-500">
@@ -45,20 +56,25 @@ export function Signup() {
                 First Name
               </p>
               <center>
-               <Inputbox placeholder="Enter your firstname" type="text" setvalue={setfirstname}/>
-               
+                <Inputbox
+                  placeholder="Enter your firstname"
+                  type="text"
+                  setvalue={setfirstname}
+                />
               </center>
             </div>
 
             <div>
-      
               <p className="font-bold text-black mt-3 ml-4 text-xs">
                 Last Name
               </p>
               <center>
                 {" "}
-                <Inputbox placeholder="Enter your lastname" type="text" setvalue={setlastname}/>
-
+                <Inputbox
+                  placeholder="Enter your lastname"
+                  type="text"
+                  setvalue={setlastname}
+                />
               </center>
             </div>
 
@@ -66,8 +82,11 @@ export function Signup() {
               <p className="font-bold text-black mt-3 ml-4 text-xs">Email</p>
               <center>
                 {" "}
-                <Inputbox placeholder="Enter your email" type="text" setvalue={setemail}/>
-
+                <Inputbox
+                  placeholder="Enter your email"
+                  type="text"
+                  setvalue={setemail}
+                />
               </center>
             </div>
 
@@ -75,8 +94,11 @@ export function Signup() {
               <p className="font-bold text-black mt-3 ml-4 text-xs">Password</p>
               <center>
                 {" "}
-                <Inputbox placeholder="Enter your password" type="password" setvalue={setpassword}/>
-
+                <Inputbox
+                  placeholder="Enter your password"
+                  type="password"
+                  setvalue={setpassword}
+                />
               </center>
             </div>
             {Message.includes("successfully") ? (
@@ -95,6 +117,7 @@ export function Signup() {
                 <button
                   className=" bg-cyan-500 rounded-md text-white w-11/12 mt-2 text-xs py-1.5 hover:bg-cyan-700 "
                   onClick={async () => {
+                    settracker(true);
                     email.trim();
                     firstname.trim();
                     lastname.trim();
@@ -116,12 +139,15 @@ export function Signup() {
                       );
                       setmessage(response.data.message);
                       if (response.data.message.includes("successfully")) {
+                        settracker(false);
                         localStorage.setItem("token", response.data.token);
+                        setmessage("");
                         navigate("/Dashboard", { replace: true });
                       }
                     } catch (error) {
                       if (error.response && error.response.data) {
                         // Check if the error response has a message key
+                        settracker(false);
                         const errorMessage = error.response.data.message;
                         setmessage(
                           errorMessage ||
@@ -133,10 +159,26 @@ export function Signup() {
                           "An error occurred while signing up. Please try again."
                         );
                       }
+                      setTimeout(() => {
+                        setmessage("");
+                      }, 5000);
                     }
                   }}
                 >
-                  Sign up
+                  {tracker ? (
+                    <div className="flex justify-center  items-center">
+                      <div
+                        class="animate-spin inline-block w-5 h-5 mr-4 border-[3px] border-current border-t-transparent text-white rounded-full "
+                        role="status"
+                        aria-label="loading"
+                      >
+                        <span class="sr-only">Loading...</span>
+                      </div>
+                      <p>Signing up...</p>
+                    </div>
+                  ) : (
+                    "Sign Up"
+                  )}
                 </button>{" "}
               </center>
             </div>
@@ -144,11 +186,10 @@ export function Signup() {
               <h2>
                 Already have an account?{" "}
                 <button
-                 onClick={()=>{
-                  navigate('/Signin')
-                 }}
+                  onClick={() => {
+                    navigate("/Signin");
+                  }}
                   className="text-cyan-500 hover:text-cyan-700 underline underline-offset-1 "
-                  
                 >
                   Login
                 </button>
