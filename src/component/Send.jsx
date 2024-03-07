@@ -4,6 +4,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { SpinAnimation } from "./SpinAnimation";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import { LoadingAtom,AmountAtom, MessageAtom, TrackerAtom } from "../../atoms/atomsSend";
+import toast from "react-hot-toast";
 
 
 
@@ -116,9 +117,12 @@ export function Send() {
                         );
                         if (response.data.message.includes("successfully")) {
                           settracker(false);
+                          toast.success(response.data.message,{
+                            duration:2000
+                          });
                           setmessage(response.data.message);
                           setTimeout(() => {
-                            alert(response.data.message);
+            
                             navigate("/TransactionCompleted");
                           }, 1000);
                         }
@@ -132,9 +136,7 @@ export function Send() {
                             errorMessage ||
                               "An error occurred while sending money. Please try again."
                           );
-                          setTimeout(() => {
-                            setmessage("");
-                          }, 2000);
+                          
                         } else {
                           // If no specific message in the error response, set a generic error message
                           setmessage(
@@ -142,7 +144,11 @@ export function Send() {
                           );
                         }
                       }
+
                     }
+                    setTimeout(() => {
+                      setmessage("");
+                    }, 2000);
                   }}
                 >
                   {tracker ? (

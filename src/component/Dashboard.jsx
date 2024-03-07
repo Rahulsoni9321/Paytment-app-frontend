@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate  } from "react-router-dom";
 import axios from "axios";
 import { Usercolumn } from "./Usercolumn";
 import { Animationuser } from "./Animationuser";
 import {
   useRecoilState,
-  useRecoilStateLoadable,
+  
   useRecoilValueLoadable,
-  useSetRecoilState,
+  
 } from "recoil";
 import {
   AllUsersAtom,
@@ -36,15 +36,33 @@ function useDebounce(input) {
 }
 
 export function Dashboard() {
-  const navigate = useNavigate();
-  const balance = useRecoilValueLoadable(BalanceAtom);
+  const [newbalance,setnewbalance]=useState("")
+  const [balancestatus,setbalancestatus]=useState(false)
   const UserdataLoadable = useRecoilValueLoadable(UserDataAtom);
   const [allusers, setallusers] = useRecoilState(AllUsersAtom);
   const [filters, setfilter] = useRecoilState(filterUser);
   const [data, setdata] = useRecoilState(AllUsersStatus);
   const debounce = useDebounce(filters);
 
+  useEffect(()=>{
+    async function balance ()  {
+      setbalancestatus(true)
+      const response = await axios.get(
+        "https://paytm-backend-3ujl.onrender.com/api/v1/account/balance",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      setbalancestatus(false)
+      setnewbalance(response.data.balance);
+    }
+    balance();
+
+  },[])
   useEffect(() => {
+    setdata(false)
     const fetch = async () => {
       try {
         const response = await axios.get(
@@ -86,14 +104,14 @@ export function Dashboard() {
             <path d="M2.273 5.625A4.483 4.483 0 0 1 5.25 4.5h13.5c1.141 0 2.183.425 2.977 1.125A3 3 0 0 0 18.75 3H5.25a3 3 0 0 0-2.977 2.625ZM2.273 8.625A4.483 4.483 0 0 1 5.25 7.5h13.5c1.141 0 2.183.425 2.977 1.125A3 3 0 0 0 18.75 6H5.25a3 3 0 0 0-2.977 2.625ZM5.25 9a3 3 0 0 0-3 3v6a3 3 0 0 0 3 3h13.5a3 3 0 0 0 3-3v-6a3 3 0 0 0-3-3H15a.75.75 0 0 0-.75.75 2.25 2.25 0 0 1-4.5 0A.75.75 0 0 0 9 9H5.25Z" />
           </svg>
           : Rs &#160;{" "}
-          {balance.state == "loading" ? (
+          { balancestatus ? (
             <div class=" flex items-center mt-1 rounded-md ml-2 w-24 ">
               <div className="h-4 w-5/6 animate-pulse bg-slate-400 rounded-lg"></div>
             </div>
           ) : (
             <span className="text-green-600 font-normal">
               {" "}
-              {balance.contents}/-
+              {newbalance}/-
             </span>
           )}
         </div>
@@ -165,7 +183,7 @@ function Navbar() {
     <>
       <div className="flex justify-between items-center  shadow-md  bg-white">
         <div className="flex font-bold ml-2 md:ml-12 text-3xl ">
-          <img className="w-56 h-24" src="/Paytm-Logo.wine.png"></img>
+          <img className="w-42 md:w-56 h-24" src="/Paytm-Logo.wine.png"></img>
         </div>
         <div className="mr-4 md:mr-16 flex justify-between ">
           {UserdataLoadable.state == "loading" ? (

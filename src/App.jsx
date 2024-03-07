@@ -7,6 +7,7 @@ import { Logout } from "./component/Logout";
 import { Signin } from "./component/Signin";
 import { Me } from "./component/Me";
 import { Transactiondone } from "./component/Transactiondone";
+import {Toaster} from "react-hot-toast"
 function App() {
 
   return (
@@ -21,6 +22,7 @@ function App() {
           <Route path="/Dashboard" element={<Dashboard/>}></Route>
           <Route path="/TransactionCompleted" element={<Transactiondone/>}/>
         </Routes> 
+        <Toaster></Toaster>
         </BrowserRouter>
        
     </>
